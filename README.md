@@ -5,15 +5,15 @@ Dependencies:
   npm 5.5.1
 
 Usage (on a Raspberry!):
-  git clone git@github.com:datnohand/sinking-ship
-  OR
-  git clone https://github.com/datnohand/sinking-ship
+  * git clone git@github.com:datnohand/sinking-ship
+  * OR
+  * git clone https://github.com/datnohand/sinking-ship
   
-  cd sinking-ship
-  npm install
-  node server
+  * cd sinking-ship
+  * npm install
+  * node server
   
 Usage (for playing):
-  Connect to the new Wifi 'SinkingGame' with password 'imsinking'
-  Visit '192.168.56.254' in any modern Browser
-  Play
+  * Connect to the new Wifi 'SinkingGame' with password 'imsinking'
+  * Visit '192.168.56.254' in any modern Browser
+  * Play
