@@ -64,8 +64,7 @@ var matrix_p2 = [
   [ 128, 127, 126, 125, 124, 123, 122, 121 ],
 ]
 
-resetGame()
-
+strip.init(NUM_LEDS)
 console.log(locale.listening_on + ' ' + config.wss.port);
 
 // If the server gets a connection
@@ -250,6 +249,7 @@ function sleep(ms) {
 }
 
 function resetGame() {
+  strip.setBrightness(config.led.brightness)
   SendToEveryone({ type: 'not', not: 'reset'})
 
   for (var i = 3; i > 0; i++) {
@@ -267,9 +267,6 @@ function resetGame() {
     strip.render(pixelData)
     sleep(500)
   }
-
-  strip.init(NUM_LEDS)
-  strip.setBrightness(config.led.brightness)
 
   if (config.led.use_background_color)
     setBackgroundColor(config.led.background_color)
