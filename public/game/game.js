@@ -51,8 +51,10 @@ server.onopen = (event) => {
         if (msg.not == 'p2conn') {
           status('Player 2 connected')
         }
-        if (msg.not == 'ready') {
-          // TODO
+        if (msg.not == 'reset') {
+          ws.close()
+          timerToReload()
+          window.location.href = 'http://'+window.location.host
         }
       break;
       case 'game':
@@ -100,6 +102,16 @@ draw_waiting()
 
 function status(txt) {
   $('#status').text(txt)
+}
+
+function timerToReload() {
+  var count = 3
+  var loop = setInterval(() => {
+    status('Opponent disconnected, restarting in '+count)
+    if (count == 0)
+      clearInterval(this)
+    count--
+  }, 1000)
 }
 
 function draw_place() {

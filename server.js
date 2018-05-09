@@ -39,6 +39,8 @@ var hostready = false
 var p2ready = false
 var host_ships = []
 var p2_ships = []
+var hostreset = false
+var p2reset = false
 
 var matrix_host = [
   [ 57, 58, 59, 60, 61, 62, 63, 64 ],
@@ -62,18 +64,15 @@ var matrix_p2 = [
   [ 128, 127, 126, 125, 124, 123, 122, 121 ],
 ]
 
-strip.init(NUM_LEDS)
-strip.setBrightness(config.led.brightness)
-
-if (config.led.use_background_color)
-  setBackgroundColor(config.led.background_color)
+resetGame()
 
 console.log(locale.listening_on + ' ' + config.wss.port);
 
 // If the server gets a connection
 wss.on('connection', function(ws, req) {
 
-  ws.host = false;
+  ws.host = false
+  ws.player = false
 
   if (!host_connected) {
     host_connected = true;
@@ -87,6 +86,7 @@ wss.on('connection', function(ws, req) {
     msg = { type: 'not', not: 'p2'}
     ws.send(JSON.stringify(msg))
     msg = { type: 'not', not: 'p2conn'}
+    ws.player = true
     SendToEveryone(msg)
     msg = {type: 'game', txt: 'place_ships'}
     SendToEveryone(msg)
@@ -99,6 +99,9 @@ wss.on('connection', function(ws, req) {
     if (ws.host)
       host_connected = false;
     num_users--
+    if (ws.player) {
+      resetGame()
+    }
   });
 
   ws.on('message', (msg) => {
@@ -126,7 +129,16 @@ wss.on('connection', function(ws, req) {
     switch (msg.type) {
       case 'login':
         ws.username = msg.username
-      break;
+      break
+      case 'reset':
+
+      hostreset = (ws.host && msg.host) ? true : hostreset
+      p2reset = (!ws.host && msg.host) ? true : p2reset
+
+      if (hostreset && p2reset) {
+        resetGame()
+      }
+      break
       case 'turn':
         x = msg.turn.x
         y = msg.turn.y
@@ -233,13 +245,22 @@ wss.on('connection', function(ws, req) {
   });
 })
 
-function resetLed() {
+function resetGame() {
+  SendToEveryone({ type: 'not', not: 'reset'})
+
   setTimeout(() => {
     for (var i = 0; i < config.led.num; i++) {
       pixelData[i] = 0xff00ff;
     }
     strip.render(pixelData)
   }, 2000)
+
+  strip.init(NUM_LEDS)
+  strip.setBrightness(config.led.brightness)
+
+  if (config.led.use_background_color)
+    setBackgroundColor(config.led.background_color)
+
 }
 
 function setBackgroundColor(color) {
