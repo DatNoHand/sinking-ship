@@ -254,12 +254,19 @@ function resetGame() {
 
   for (var i = 3; i > 0; i++) {
     for (var i = 0; i < config.led.num; i++) {
-      pixelData[i] = 0xff00ff;
+      pixelData[i] = '0x00ff00';
     }
+
     strip.render(pixelData)
-    sleep(1000)
+    sleep(500)
+
+    for (var i = 0; i < config.led.num; i++) {
+      pixelData[i] = '0x0000ff';
+    }
+
+    strip.render(pixelData)
+    sleep(500)
   }
-}
 
   strip.init(NUM_LEDS)
   strip.setBrightness(config.led.brightness)
