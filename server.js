@@ -245,15 +245,21 @@ wss.on('connection', function(ws, req) {
   });
 })
 
+function sleep(ms) {
+  return setTimeout(() => { }, ms)
+}
+
 function resetGame() {
   SendToEveryone({ type: 'not', not: 'reset'})
 
-  setTimeout(() => {
+  for (var i = 3; i > 0; i++) {
     for (var i = 0; i < config.led.num; i++) {
       pixelData[i] = 0xff00ff;
     }
     strip.render(pixelData)
-  }, 2000)
+    sleep(1000)
+  }
+}
 
   strip.init(NUM_LEDS)
   strip.setBrightness(config.led.brightness)

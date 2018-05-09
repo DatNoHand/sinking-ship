@@ -104,14 +104,15 @@ function status(txt) {
   $('#status').text(txt)
 }
 
+function sleep(ms) {
+  setTimeout(() => { }, ms)
+}
+
 function timerToReload() {
-  var count = 3
-  var loop = setInterval(() => {
+  for (var i = 3; i > 0; i--) {
     status('Opponent disconnected, restarting in '+count)
-    if (count == 0)
-      clearInterval(this)
-    count--
-  }, 1000)
+  }
+  window.location = '/'
 }
 
 function draw_place() {
