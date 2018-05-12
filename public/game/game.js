@@ -3,18 +3,6 @@
 * @author Gabriel Selinschek
 **/
 
-function getQueryParams(qs) {
-    qs = qs.split("+").join(" ");
-    var params = {},
-        tokens,
-        re = /[?&]?([^=]+)=([^&]*)/g;
-    while (tokens = re.exec(qs)) {
-        params[decodeURIComponent(tokens[1])]
-            = decodeURIComponent(tokens[2]);
-    }
-    return params;
-}
-
 var $_GET = getQueryParams(document.location.search);
 
 var obj = { Title: 'Sink ship', Url: '/shipgame' };
@@ -100,6 +88,18 @@ server.onopen = (event) => {
 
 draw_waiting()
 
+$('.btn.reset').on('click', (e) => {
+  resetGame()
+})
+
+
+// == FUNCTIONS ==
+
+function resetGame() {
+  status('You asked to reset, waiting for opponents confirm')
+  send({type: reset, host: host})
+}
+
 function status(txt) {
   $('#status').text(txt)
 }
@@ -176,6 +176,18 @@ function draw_game() {
       my_turn = false;
     }
   });
+}
+
+function getQueryParams(qs) {
+    qs = qs.split("+").join(" ");
+    var params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+    while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])]
+            = decodeURIComponent(tokens[2]);
+    }
+    return params;
 }
 
 function draw_waiting() {
